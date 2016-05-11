@@ -1,0 +1,11 @@
+<ehcache>
+    <diskStore path="."/>
+
+    <defaultCache maxElementsInMemory="0"/>
+
+    <cache name="cache"
+           maxElementsInMemory="500"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU"
+           eternal="true" />
+</ehcache>

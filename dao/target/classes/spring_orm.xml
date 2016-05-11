@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <!-- Здесь должны находиться объявления компонентов -->
+
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName"
+                  value="org.postgresql.Driver" />
+        <property name="url"
+                  value="jdbc:postgresql://localhost/wcsm" />
+        <property name="username" value="yauheni" />
+        <property name="password" value="Ok5729556" />
+        <property name="initialSize" value="5" />
+        <property name="maxActive" value="10" />
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="org.course.project.model" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
+                <property name="showSql" value="true"/>
+                <property name="generateDdl" value="true"/>
+                <property name="databasePlatform" value="org.eclipse.persistence.platform.database.PostgreSQLPlatform"/>
+            </bean>
+        </property>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="eclipselink.ddl-generation">drop-and-create-tables</prop>
+                <prop key="eclipselink.create-ddl-jdbc-file-name">createDDL_ddlGeneration.jdbc</prop>
+                <prop key="eclipselink.drop-ddl-jdbc-file-name">dropDDL_ddlGeneration.jdbc</prop>
+                <prop key="eclipselink.ddl-generation.output-mode">both</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="persistenceExceptionTranslationPostProcessor" class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+</beans>
