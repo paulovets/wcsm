@@ -37,7 +37,6 @@ public class ClientAdmin implements java.io.Serializable {
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY)
-    @JsonProperty(value = "sites")
     private List<Site> sitesList;
 
     public ClientAdmin() {
@@ -97,6 +96,7 @@ public class ClientAdmin implements java.io.Serializable {
         this.surname = surname;
     }
 
+    @JsonIgnore
     public void setSites(final List<Site> sitesList){
         this.sitesList = sitesList;
     }
