@@ -1,5 +1,7 @@
 package org.course.project.model.system;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -9,25 +11,38 @@ public class Data implements java.io.Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty(value = "id")
     private Long id;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPONENT_ID")
+    @OneToOne
+    @JsonIgnore
     private Component component;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    private AbstractEntity abstractEntity;
+    @Column(name = "RELATED_ENTITY_NAME")
+    @JsonProperty(value = "relatedEntityClassName")
+    private String relatedEntityName;
 
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ALPACA_ID")
+    @ManyToOne
+    @JsonProperty(value = "alpacaEntity")
     private AlpacaEntity alpacaEntity;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
-    private Page page;
-
     public Data() {
+    }
+
+    public Data(final Component component, final AlpacaEntity alpacaEntity, final String relatedEntityName) {
+        this.component = component;
+        this.alpacaEntity = alpacaEntity;
+        this.relatedEntityName = relatedEntityName;
+    }
+
+    public Data(final AlpacaEntity alpacaEntity, final String relatedEntityName) {
+        this.alpacaEntity = alpacaEntity;
+        this.relatedEntityName = relatedEntityName;
     }
 
     public Long getId() {
@@ -42,12 +57,12 @@ public class Data implements java.io.Serializable {
         this.component = component;
     }
 
-    public AbstractEntity getAbstractEntity() {
-        return this.abstractEntity;
+    public String getRelatedEntityName() {
+        return this.relatedEntityName;
     }
 
-    public void setAbstractEntity(final AbstractEntity abstractEntity) {
-        this.abstractEntity = abstractEntity;
+    public void setRelatedEntityName(final String relatedEntityName) {
+        this.relatedEntityName = relatedEntityName;
     }
 
     public AlpacaEntity getAlpacaEntity() {
@@ -58,21 +73,14 @@ public class Data implements java.io.Serializable {
         this.alpacaEntity = alpacaEntity;
     }
 
-    public Page getPage() {
-        return this.page;
-    }
-
-    public void setPage(final Page page) {
-        this.page = page;
-    }
-
     public int hashCode() {
         int hash = 0;
+        hash += this.relatedEntityName.hashCode();
         hash += (this.id != null) ? this.id.hashCode() : 0;
         return hash;
     }
 
-    public boolean equals( final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -80,7 +88,7 @@ public class Data implements java.io.Serializable {
         if (getClass() != obj.getClass())
             return false;
         Data other = (Data) obj;
-        if (this.id != other.id)
+        if (this.id != other.id || !this.relatedEntityName.equals(other.relatedEntityName))
             return false;
         return true;
     }
