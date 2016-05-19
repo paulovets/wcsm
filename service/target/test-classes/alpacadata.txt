@@ -1,1 +1,0 @@
-{"form":"test","knowncontrolid":"test","inlinestyle":"test","customattribute":"test","validationmessage":"test","type":"test","validate":"test","showMessages":"test","disabled":"test","readonly":"test","hidden":"test","label":"test","helper":"test","helpers":"test","fieldClass":"test","hideInitValidationError":"test","focus":"test","optionLabels":"test","view":"test"}
