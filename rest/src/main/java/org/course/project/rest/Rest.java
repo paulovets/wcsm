@@ -51,7 +51,8 @@ public final class Rest {
     public IEntityService<Component> componentService;
 
     @Autowired
-    public IDataService dataService;
+    @Qualifier(value = "dataService")
+    public IEntityService<Data> dataService;
 
     @Autowired
     public IDynamicEntityService dynamicEntityService;

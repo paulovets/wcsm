@@ -17,6 +17,8 @@ import java.util.Map;
 public class BaseEntityService<T> implements IEntityService<T> {
 
     private final static String LONG_TYPE = "Long";
+    private final static String PARENT_ID = "parentid";
+    private final static String PARENT_FIELD_NAME = "parentFieldName";
     public final static String CONFIG_OPTIONS = "configOptions";
     public final static String CONFIG_SCHEMA = "configSchema";
 
@@ -44,6 +46,21 @@ public class BaseEntityService<T> implements IEntityService<T> {
         }
 
         return this.getBaseDao().get(null);
+    }
+
+    @Override
+    public List<T> getByParents(final Map<String, String> paramsMap) throws ParametersException {
+
+        if(paramsMap.values().size() < 2 ||
+           !paramsMap.containsKey(BaseEntityService.PARENT_ID) || !paramsMap.containsKey(BaseEntityService.PARENT_FIELD_NAME)) {
+            throw new ParametersException("BaseEntityService, getByParents, incompatible types.");
+        }
+
+        final Long parenttId = Long.valueOf(paramsMap.get(BaseEntityService.PARENT_ID));
+        final String parenttFieldName = paramsMap.get(BaseEntityService.PARENT_FIELD_NAME);
+
+        return this.getBaseDao().getByParent(parenttFieldName, parenttId);
+
     }
 
     @Override

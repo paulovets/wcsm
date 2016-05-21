@@ -3,7 +3,6 @@ package org.course.project.service.implementations;
 import org.course.project.dao.interfaces.IDao;
 import org.course.project.dao.interfaces.ISiteDao;
 import org.course.project.model.system.Site;
-import org.course.project.service.interfaces.IUserService;
 import org.course.project.utility.exceptions.ParametersException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +15,6 @@ public final class SiteService extends BaseEntityService<Site> {
 
     private final static String NAME = "name";
     private final static String ADMIN_ID = "adminid";
-
-    @Autowired
-    private IUserService userService;
 
     @Autowired
     private ISiteDao baseDao;

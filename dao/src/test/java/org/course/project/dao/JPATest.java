@@ -262,6 +262,20 @@ public class JPATest {
         }
         Assert.assertTrue(pagesNumber > 0);
 
+        final Long ownerId = site.getOwner().getId();
+        final String parentFieldName = "owner";
+        sitesList = this.siteDao.getByParent(parentFieldName, ownerId);
+        Assert.assertTrue(sitesList.size() > 0);
+
+        Boolean isSitePresent = false;
+        for(Site s : sitesList) {
+            if(s.getId() == site.getId()) {
+                isSitePresent = true;
+                break;
+            }
+        }
+        Assert.assertTrue(isSitePresent);
+
         sitesList = this.siteDao.get(site.getId());
         Assert.assertTrue(sitesList.size() == 1);
 
@@ -280,18 +294,6 @@ public class JPATest {
         this.siteDao.remove(site);
         sitesList = this.siteDao.get(site.getId());
         Assert.assertTrue(sitesList.size() == 0);
-
-    }
-
-    @Test
-    @Transactional
-    public void testDataDao() {
-
-        List<Data> datasList = this.dataDao.get(null);
-        final Long componentId = datasList.get(0).getComponent().getId();
-
-        datasList = this.dataDao.getByParent(componentId);
-        Assert.assertTrue(datasList.size() > 0);
 
     }
 

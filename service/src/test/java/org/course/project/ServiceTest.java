@@ -50,7 +50,8 @@ public class ServiceTest {
     public IEntityService<Component> componentService;
 
     @Autowired
-    public IDataService dataService;
+    @Qualifier(value = "dataService")
+    public IEntityService<Data> dataService;
 
     @Autowired
     public IDynamicEntityService dynamicEntityService;
@@ -81,6 +82,8 @@ public class ServiceTest {
     public void init() throws NoSuchMethodException, ParametersException, IOException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         if( !ServiceTest.isInited ) {
+
+            //this.dropDynamic();
 
             ServiceTest.isInited = true;
 
@@ -230,7 +233,9 @@ public class ServiceTest {
                     dynamicMap.put("alpacadata", alpacaData);
                     dynamicMap.put("classname", ServiceTest.TEST_WORD);
 
-                    this.dynamicEntityService.persist(dynamicMap);
+                    DynamicEntity de = this.dynamicEntityService.persist(dynamicMap);
+
+                    System.out.println(de);
 
                 }
 
@@ -292,6 +297,23 @@ public class ServiceTest {
             }
         }
 
+        final Long siteId = page.getSite().getId();
+        final String parentFieldName = "site";
+        final Map<String,String> relationshipsMap = new HashMap<String,String>();
+        relationshipsMap.put("parentid", siteId.toString());
+        relationshipsMap.put("parentFieldName", parentFieldName);
+        pagesList = this.pageService.getByParents(relationshipsMap);
+        Assert.assertTrue(pagesList.size() > 0);
+
+        Boolean isPagePresent = false;
+        for(Page p : pagesList) {
+            if(p.getId() == page.getId()) {
+                isPagePresent = true;
+                break;
+            }
+        }
+        Assert.assertTrue(isPagePresent);
+
         Map<String,String> fieldsForUpdate = new HashMap<String,String>();
         final String testWord = "configOptions";
         fieldsForUpdate.put(testWord, testWord);
@@ -304,20 +326,6 @@ public class ServiceTest {
         this.pageService.remove(fieldsForUpdate);
         pagesList = this.pageService.get(fieldsForUpdate);
         Assert.assertTrue(pagesList.size() == 0);
-
-    }
-
-    @Transactional
-    @Test
-    public void testDataService() throws ParametersException {
-
-        List<Data> datasList = this.dataService.get(new HashMap<String, String>());
-        final Long componentId = datasList.get(0).getComponent().getId();
-
-        final Map<String,String> relationshipsMap = new HashMap<String,String>();
-        relationshipsMap.put("componentid", componentId.toString());
-        datasList = this.dataService.getByParents(relationshipsMap);
-        Assert.assertTrue(datasList.size() > 0);
 
     }
 
@@ -347,6 +355,12 @@ public class ServiceTest {
         dynamicEntity = this.dynamicEntityService.update(fieldsForUpdateMap);
 
         Assert.assertTrue(!oldFocus.equals(dynamicEntity.<String>get("focus")));
+
+        this.dropDynamic();
+
+    }
+
+    private void dropDynamic() {
 
         final String queryStr = new String("DROP TABLE " + ServiceTest.TEST_WORD + ";");
         final Query query = em.createNativeQuery(queryStr);

@@ -63,6 +63,7 @@ public final class DynamicEntityDao implements IDynamicEntityDao {
     @Override
     public DynamicEntity persist(final DynamicEntity record) {
         em.persist(record);
+        em.flush();
         return record;
     }
 }

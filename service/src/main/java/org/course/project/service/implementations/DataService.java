@@ -4,7 +4,6 @@ import org.course.project.dao.interfaces.IDao;
 import org.course.project.dao.interfaces.IDataDao;
 import org.course.project.model.system.AlpacaEntity;
 import org.course.project.model.system.Data;
-import org.course.project.service.interfaces.IDataService;
 import org.course.project.service.interfaces.IEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service("dataService")
-public final class DataService extends BaseEntityService<Data> implements IDataService {
+public final class DataService extends BaseEntityService<Data> {
 
     private final static String ALPACA_ID = "alpacaid";
     private final static String COMPONENT_ID = "componentid";
@@ -29,20 +28,6 @@ public final class DataService extends BaseEntityService<Data> implements IDataS
     @Autowired
     @Qualifier("alpacaService")
     private IEntityService<AlpacaEntity> alpacaService;
-
-    @Override
-    public List<Data> getByParents(final Map<String, String> paramsMap) throws ParametersException {
-
-        if(paramsMap.values().size() < 1 ||
-           !paramsMap.containsKey(DataService.COMPONENT_ID)) {
-            throw new ParametersException("DataService, get, incompatible types.");
-        }
-
-        final Long componentId = Long.valueOf(paramsMap.get(DataService.COMPONENT_ID));
-
-        return this.baseDao.getByParent(componentId);
-
-    }
 
     @Transactional
     @Override

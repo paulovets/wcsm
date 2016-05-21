@@ -18,6 +18,7 @@ import java.util.Map;
 public class BaseDao<T> implements IDao<T> {
 
     private static final String SETTER = "set";
+    private static final String ID = "id";
 
     @PersistenceContext
     protected EntityManager em;
@@ -54,6 +55,18 @@ public class BaseDao<T> implements IDao<T> {
             return q.getResultList();
 
         }
+
+    }
+
+    @Override
+    public List<T> getByParent(final String parentFieldName, final Long parentId) {
+
+        final CriteriaBuilder cb = em.getCriteriaBuilder();
+        final CriteriaQuery<T> cq = cb.createQuery(this.clazz);
+        final Root<T> entity = cq.from(this.clazz);
+        cq.where(cb.and(cb.equal(entity.get(parentFieldName).get(BaseDao.ID), parentId)));
+        final TypedQuery<T> q = em.createQuery(cq);
+        return q.getResultList();
 
     }
 
