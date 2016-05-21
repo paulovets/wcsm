@@ -63,6 +63,11 @@
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-el</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.thetransactioncompany</groupId>
+            <artifactId>cors-filter</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>wcsm</finalName>

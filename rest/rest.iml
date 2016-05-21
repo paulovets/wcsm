@@ -81,5 +81,7 @@
     <orderEntry type="library" name="Maven: org.apache.tiles:tiles-api:3.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tiles:tiles-autotag-core-runtime:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tiles:tiles-el:3.0.5" level="project" />
+    <orderEntry type="library" name="Maven: com.thetransactioncompany:cors-filter:2.5" level="project" />
+    <orderEntry type="library" name="Maven: com.thetransactioncompany:java-property-utils:1.9.1" level="project" />
   </component>
 </module>
